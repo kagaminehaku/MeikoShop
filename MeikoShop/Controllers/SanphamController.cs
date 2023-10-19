@@ -33,12 +33,6 @@ namespace MeikoShop.Controllers
             var all = db.Sanphams.Where(n => n.Mahang > 0).ToList();
             return PartialView(all);
         }
-
-        //public ActionResult dttheohang()
-        //{
-        //    var mi = db.Sanphams.Where(n => n.Mahang == 5).Take(4).ToList();
-        //    return PartialView(mi);
-        //}
         public ActionResult xemchitiet(int Masp=0)
         {
             var chitiet = db.Sanphams.SingleOrDefault(n=>n.Masp==Masp);
