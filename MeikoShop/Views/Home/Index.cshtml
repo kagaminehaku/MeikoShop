@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "MEIKO SHOP";
+    
+}
+
+
+<br />
+<div class="row">
+    <div class="col-md-8">
+       @Html.Action("SlidePartial","Home")
+    </div>
+    <div class="col-md-4">
+        <img src="~/ELMImages/qc2.gif" class="img-responsive" alt="" />
+    </div>
+</div>
+<div>
+    <img class="img-responsive" src="~/ELMImages/ban.jpg" />
+</div>
+<br />
+<div class="spnoibat">
+    <div class="row">
+
+        <h3> SẢN PHẨM NỔI BẬT</h3>
+        <div class="col-md-4">
+            <img src="~/ELMImages/spnb4.jpg" class="img-responsive" alt="" />
+        </div>
+        <div class="col-md-4">
+            <img src="~/ELMImages/spnb2.jpg" class="img-responsive" alt="" />
+        </div>
+        <div class="col-md-4">
+            <img src="~/ELMImages/spnb3.jpg" class="img-responsive" alt="" />
+        </div>
+    </div>
+</div>
+<div class="fg">
+
+    @Html.Action("SquareEnix", "Sanpham")
+</div>
+<div class="fg">
+
+    @Html.Action("BandaiNamco", "Sanpham")
+</div>
+
+<div class="fg">
+
+    @Html.Action("GoodSmile", "Sanpham")
+</div>
+
+<div class="fg">
+
+    @Html.Action("All", "Sanpham")
+</div>
+
