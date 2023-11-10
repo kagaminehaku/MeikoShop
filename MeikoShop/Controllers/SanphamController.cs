@@ -11,7 +11,6 @@ namespace MeikoShop.Controllers
     {
         Qlbanhang db = new Qlbanhang();
 
-        // GET: Sanpham
         public ActionResult SquareEnix()
         {
             var se = db.Sanphams.Where(n=>n.Mahang==2).Take(4).ToList();
