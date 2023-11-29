@@ -238,7 +238,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\DonhangsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HangsanxuatsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\HedieuhanhsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChatlieuController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoidungsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhanQuyensController.cs" />
@@ -2025,11 +2025,6 @@
     <Content Include="Areas\Admin\Views\Chatlieu\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Chatlieu\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Chatlieu\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\PhanQuyens\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\PhanQuyens\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\PhanQuyens\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\PhanQuyens\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\PhanQuyens\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Content\ckeditor\CHANGES.md" />
     <Content Include="Content\ckeditor\LICENSE.md" />

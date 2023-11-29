@@ -27,12 +27,12 @@ namespace MeikoShop.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Chatlieu hedieuhanh = db.Chatlieu.Find(id);
-            if (hedieuhanh == null)
+            Chatlieu chatlieu = db.Chatlieu.Find(id);
+            if (chatlieu == null)
             {
                 return HttpNotFound();
             }
-            return View(hedieuhanh);
+            return View(chatlieu);
         }
 
         // GET: Admin/Chatlieu/Create
@@ -46,16 +46,16 @@ namespace MeikoShop.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Machatlieu,Tenchatlieu")] Chatlieu hedieuhanh)
+        public ActionResult Create([Bind(Include = "Machatlieu,Tenchatlieu")] Chatlieu chatlieu)
         {
             if (ModelState.IsValid)
             {
-                db.Chatlieu.Add(hedieuhanh);
+                db.Chatlieu.Add(chatlieu);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(hedieuhanh);
+            return View(chatlieu);
         }
 
         // GET: Admin/Chatlieu/Edit/5
@@ -65,12 +65,12 @@ namespace MeikoShop.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Chatlieu hedieuhanh = db.Chatlieu.Find(id);
-            if (hedieuhanh == null)
+            Chatlieu chatlieu = db.Chatlieu.Find(id);
+            if (chatlieu == null)
             {
                 return HttpNotFound();
             }
-            return View(hedieuhanh);
+            return View(chatlieu);
         }
 
         // POST: Admin/Chatlieu/Edit/5
@@ -78,15 +78,15 @@ namespace MeikoShop.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Machatlieu,Tenchatlieu")] Chatlieu hedieuhanh)
+        public ActionResult Edit([Bind(Include = "Machatlieu,Tenchatlieu")] Chatlieu chatlieu)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(hedieuhanh).State = EntityState.Modified;
+                db.Entry(chatlieu).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(hedieuhanh);
+            return View(chatlieu);
         }
 
         // GET: Admin/Chatlieu/Delete/5
@@ -96,12 +96,12 @@ namespace MeikoShop.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Chatlieu hedieuhanh = db.Chatlieu.Find(id);
-            if (hedieuhanh == null)
+            Chatlieu chatlieu = db.Chatlieu.Find(id);
+            if (chatlieu == null)
             {
                 return HttpNotFound();
             }
-            return View(hedieuhanh);
+            return View(chatlieu);
         }
 
         // POST: Admin/Chatlieu/Delete/5
@@ -109,8 +109,8 @@ namespace MeikoShop.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Chatlieu hedieuhanh = db.Chatlieu.Find(id);
-            db.Chatlieu.Remove(hedieuhanh);
+            Chatlieu chatlieu = db.Chatlieu.Find(id);
+            db.Chatlieu.Remove(chatlieu);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
