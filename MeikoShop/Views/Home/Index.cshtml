@@ -1,53 +1,75 @@
 ﻿@{
-    ViewBag.Title = "MEIKO SHOP";
-    
+    ViewBag.Title = "MeikoShop - Trang chủ";
 }
 
-
-<br />
-<div class="row">
-    <div class="col-md-8">
-       @Html.Action("SlidePartial","Home")
-    </div>
-    <div class="col-md-4">
-        <img src="~/ELMImages/qc2.gif" class="img-responsive" alt="" />
-    </div>
-</div>
-<div>
-    <img class="img-responsive" src="~/ELMImages/ban.jpg" />
-</div>
-<br />
-<div class="spnoibat">
-    <div class="row">
-
-        <h3> SẢN PHẨM NỔI BẬT</h3>
-        <div class="col-md-4">
-            <img src="~/ELMImages/spnb4.jpg" class="img-responsive" alt="" />
+<!-- Hero / Carousel Section -->
+<div class="row g-4 mt-2 mb-4">
+    <div class="col-lg-8">
+        <div class="glass-card h-100 overflow-hidden shadow-lg border-0">
+            @Html.Action("SlidePartial", "Home")
         </div>
-        <div class="col-md-4">
-            <img src="~/ELMImages/spnb2.jpg" class="img-responsive" alt="" />
-        </div>
-        <div class="col-md-4">
-            <img src="~/ELMImages/spnb3.jpg" class="img-responsive" alt="" />
+    </div>
+    <div class="col-lg-4">
+        <div class="glass-card h-100 overflow-hidden shadow">
+            <img src="~/ELMImages/qc2.gif" class="img-fluid w-100 h-100" alt="Quảng cáo" style="object-fit: cover;" />
         </div>
     </div>
 </div>
-<div class="fg">
 
+<!-- Horizontal Banner (ban.jpg) -->
+<div class="mb-5">
+    <div class="glass-card overflow-hidden shadow">
+        <img src="~/ELMImages/ban.jpg" class="img-fluid w-100" alt="Banner" />
+    </div>
+</div>
+
+<!-- Nổi Bật Section -->
+<div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="bg-gradient-primary rounded-circle" style="width: 12px; height: 12px; background: linear-gradient(45deg, #6366f1, #ec4899);"></div>
+        <h2 class="m-0 text-gradient text-uppercase">Bộ Sưu Tập Nổi Bật</h2>
+        <div class="flex-grow-1" style="height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);"></div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="card-img-wrapper">
+                    <img src="~/ELMImages/spnb4.jpg" class="img-fluid" alt="Nổi bật 1" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="card-img-wrapper">
+                    <img src="~/ELMImages/spnb2.jpg" class="img-fluid" alt="Nổi bật 2" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="card-img-wrapper">
+                    <img src="~/ELMImages/spnb3.jpg" class="img-fluid" alt="Nổi bật 3" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Brand Sections -->
+<div class="brand-section mb-5">
     @Html.Action("SquareEnix", "Sanpham")
 </div>
-<div class="fg">
 
+<div class="brand-section mb-5">
     @Html.Action("BandaiNamco", "Sanpham")
 </div>
 
-<div class="fg">
-
+<div class="brand-section mb-5">
     @Html.Action("GoodSmile", "Sanpham")
 </div>
 
-<div class="fg">
-
+<div class="brand-section mb-5">
     @Html.Action("All", "Sanpham")
 </div>
 

@@ -1,28 +1,79 @@
 ﻿@using MeikoShop.Models
 @model Sanpham
 
-
 @{
-    ViewBag.Title = "xemchitiet";
+    ViewBag.Title = Model.Tensp;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br />
 
-<CENTER>
-    <div>
-        <h2>CHI TIẾT SẢN PHẨM</h2>
-        <img src="@Url.Content("~" +@Model.Anhbia)" />
-        <br />
-        <h3> @Model.Tensp</h3>
-        <h3 style="color:red">Giá: @String.Format("{0:0,0}", @Model.Giatien) VND</h3>
-        <br />
-        @Model.Mota
-        <br />
-        @using (Html.BeginForm("ThemGioHang","GioHang",new { @iMasp=Model.Masp, @strURL=Request.Url.ToString()}))
-        {
-                <input type="submit" value="Mua hàng" id="bgnGioHang" />
+<div class="container py-5 mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-transparent p-0 m-0">
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted hover-white"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted hover-white">Sản phẩm</a></li>
+            <li class="breadcrumb-item active text-white" aria-current="page">@Model.Tensp</li>
+        </ol>
+    </nav>
 
-        }
-        
+    <div class="row g-5">
+        <!-- Image Gallery -->
+        <div class="col-lg-6">
+            <div class="glass-card p-2 position-relative">
+                <div class="position-absolute top-0 start-0 m-4 z-1">
+                    <span class="badge bg-gradient-primary fs-6 px-3 py-2 rounded-pill shadow">Premium</span>
+                </div>
+                <img src="@Url.Content("~" + @Model.Anhbia)" class="img-fluid rounded-4 w-100" alt="@Model.Tensp" style="object-fit: cover; aspect-ratio: 1/1;">
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-6 d-flex flex-column">
+            <div class="mb-4">
+                <h1 class="text-gradient fw-bold display-5 mb-3">@Model.Tensp</h1>
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="text-price display-6">@String.Format("{0:0,0}", @Model.Giatien) đ</div>
+                    <div class="badge bg-success bg-opacity-25 text-success border border-success px-3 py-2 rounded-pill"><i class="fa-solid fa-check-circle me-1"></i> Còn hàng</div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 mb-4 flex-grow-1">
+                <h4 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-circle-info text-primary"></i> Thông tin sản phẩm</h4>
+                <div class="product-description lh-lg" style="font-size: 1.05rem; color: #f8fafc !important;">
+                    @if (string.IsNullOrEmpty(Model.Mota))
+                    {
+                        <p class="fst-italic opacity-75">Đang cập nhật mô tả cho sản phẩm này.</p>
+                    }
+                    else
+                    {
+                        @Html.Raw(Model.Mota.Replace("\n", "<br/>"))
+                    }
+                </div>
+            </div>
+            
+            <style>
+                /* Override any hardcoded inline colors from CKEditor */
+                .product-description * {
+                    color: inherit !important;
+                    background-color: transparent !important;
+                }
+            </style>
+
+            <!-- Add to Cart Action -->
+            <div class="glass-card p-4 mt-auto">
+                @using (Html.BeginForm("ThemGioHang", "GioHang", new { @iMasp = Model.Masp, @strURL = Request.Url.ToString() }, FormMethod.Post, new { @class = "d-flex gap-3 align-items-center" }))
+                {
+                    <div class="input-group" style="width: 140px;">
+                        <button class="btn btn-outline-secondary text-white border-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
+                        <input type="number" class="form-control bg-transparent text-white border-secondary text-center" min="1" max="10" value="1" name="quantity" readonly>
+                        <button class="btn btn-outline-secondary text-white border-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-gradient btn-lg flex-grow-1 py-3 fw-bold fs-5 shadow-lg">
+                        <i class="fa-solid fa-cart-arrow-down me-2"></i> Thêm Vào Giỏ Hàng
+                    </button>
+                }
+            </div>
+        </div>
     </div>
-</CENTER>
+</div>

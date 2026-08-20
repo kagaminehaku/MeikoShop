@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -24,6 +24,10 @@ namespace MeikoShop.Controllers
             try
             {
                 Session["userReg"] = nguoidung;
+
+                // Mã hoá mật khẩu và set quyền mặc định (Mass Assignment Fix & Password Hashing Fix)
+                nguoidung.Matkhau = md5(nguoidung.Matkhau);
+                nguoidung.IDQuyen = 2; // Giả sử 2 là user thường
 
                 // Thêm người dùng  mới
                 db.Nguoidungs.Add(nguoidung);
@@ -62,11 +66,12 @@ namespace MeikoShop.Controllers
         {
             string userMail = userlog["userMail"].ToString();
             string password = userlog["password"].ToString();
-            var islogin = db.Nguoidungs.SingleOrDefault(x => x.Email.Equals(userMail) && x.Matkhau.Equals(password));
+            string hashed_password = md5(password);
+            var islogin = db.Nguoidungs.SingleOrDefault(x => x.Email.Equals(userMail) && x.Matkhau.Equals(hashed_password));
 
             if (islogin != null)
             {
-                if (userMail == "Admin@gmail.com")
+                if (islogin.IDQuyen == 1) // 1 là Admin
                 {
                     Session["use"] = islogin;
                     return RedirectToAction("Index", "Admin/Home");
@@ -97,6 +102,11 @@ namespace MeikoShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var sessionUser = Session["use"] as Nguoidung;
+            if (sessionUser == null || sessionUser.MaNguoiDung != id)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             Nguoidung nguoiDung = db.Nguoidungs.Find(id);
             if (nguoiDung == null)
             {
@@ -111,6 +121,11 @@ namespace MeikoShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var sessionUser = Session["use"] as Nguoidung;
+            if (sessionUser == null || sessionUser.MaNguoiDung != id)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             Nguoidung nguoidung = db.Nguoidungs.Find(id);
             if (nguoidung == null)
             {
@@ -123,10 +138,14 @@ namespace MeikoShop.Controllers
         // POST: Admin/Nguoidungs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaNguoiDung,Hoten,Email,Dienthoai,Matkhau,IDQuyen, Anhdaidien,Diachi")] Nguoidung nguoidung)
+        public ActionResult Edit([Bind(Include = "MaNguoiDung,Hoten,Email,Dienthoai,Matkhau,Anhdaidien,Diachi")] Nguoidung nguoidung)
         {
             if (ModelState.IsValid)
             {
+                var existingUser = db.Nguoidungs.AsNoTracking().FirstOrDefault(x => x.MaNguoiDung == nguoidung.MaNguoiDung);
+                if (existingUser != null) {
+                    nguoidung.IDQuyen = existingUser.IDQuyen; // Prevent IDQuyen modification
+                }
                 db.Entry(nguoidung).State = EntityState.Modified;
                 db.SaveChanges();
                 //@ViewBag.show = "Chỉnh sửa hồ sơ thành công";

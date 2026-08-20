@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +7,7 @@ using MeikoShop.Models;
 using System.Data.Entity;
 namespace MeikoShop.Areas.Admin.Controllers
 {
+    [AdminAuthorize]
     public class ThongkesController : Controller
     {
         private Qlbanhang db = new Qlbanhang();

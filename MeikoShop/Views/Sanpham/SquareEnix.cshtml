@@ -1,24 +1,37 @@
-﻿
-    <div class="row">
-        <div class=" bg-danger"><h3 style="padding-left:20px"> Square Enix </h3></div>
-        @foreach (var item in Model)
-        {
-            <div class="col-md-3 col-sm-6">
-                <a href="@Url.Action("xemchitiet", new {@Masp=item.Masp })">
-                    <img src=@Url.Content("~" +item.Anhbia.ToString()) class="img-responsive" alt="" width="400" height="400" />
+﻿@using MeikoShop.Models
+@model IEnumerable<Sanpham>
+
+<div class="d-flex align-items-center gap-3 mb-4">
+    <div class="bg-gradient-primary rounded-circle" style="width: 12px; height: 12px; background: linear-gradient(45deg, #6366f1, #ec4899);"></div>
+    <h3 class="m-0 text-gradient text-uppercase fw-bold">Thương hiệu: Square Enix</h3>
+    <div class="flex-grow-1" style="height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);"></div>
+</div>
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="glass-card h-100 d-flex flex-column">
+                <a href="@Url.Action("xemchitiet", new { @Masp = item.Masp })" class="text-decoration-none">
+                    <div class="card-img-wrapper">
+                        <img src="@Url.Content("~" + item.Anhbia.ToString())" alt="@item.Tensp" />
+                    </div>
                 </a>
-                    <center>
-                        <h3>@item.Tensp</h3>
-                        <h3 style="color:red">Giá: @String.Format("{0:0,0}", @item.Giatien) VND</h3>
-                        <br />
+                <div class="p-3 d-flex flex-column flex-grow-1">
+                    <a href="@Url.Action("xemchitiet", new { @Masp = item.Masp })" class="text-decoration-none text-main mb-2">
+                        <h5 class="fw-bold mb-0 text-truncate" title="@item.Tensp">@item.Tensp</h5>
+                    </a>
+                    <div class="mt-auto">
+                        <div class="text-price mb-3">@String.Format("{0:0,0}", item.Giatien) đ</div>
                         @using (Html.BeginForm("ThemGioHang", "GioHang", new { @iMasp = item.Masp, @strURL = Request.Url.ToString() }))
                         {
-                            <input type="submit" value="Mua hàng" id="bgnGioHang" />
-
+                            <button type="submit" class="btn-gradient w-100">
+                                <i class="fa-solid fa-cart-plus me-2"></i> Thêm vào giỏ
+                            </button>
                         }
-                    </center>
-
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
-        }
-    </div>
-
