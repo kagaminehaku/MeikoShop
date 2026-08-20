@@ -127,6 +127,68 @@ namespace MeikoShop.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Admin/Nguoidungs/ChangePassword
+        public ActionResult ChangePassword()
+        {
+            var u = Session["use"] as Nguoidung;
+            if (u == null)
+            {
+                return Redirect("/User/Dangnhap");
+            }
+            return View();
+        }
+
+        // POST: Admin/Nguoidungs/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(FormCollection form)
+        {
+            var u = Session["use"] as Nguoidung;
+            if (u == null)
+            {
+                return Redirect("/User/Dangnhap");
+            }
+
+            string oldPass = form["oldPassword"];
+            string newPass = form["newPassword"];
+            string confirmPass = form["confirmPassword"];
+
+            var user = db.Nguoidungs.Find(u.MaNguoiDung);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            string hashedOld = MeikoShop.Controllers.UserController.sha512(oldPass ?? "");
+            if (user.Matkhau != hashedOld)
+            {
+                ViewBag.Error = "Mật khẩu cũ không chính xác!";
+                return View();
+            }
+
+            if (newPass != confirmPass)
+            {
+                ViewBag.Error = "Mật khẩu xác nhận không khớp!";
+                return View();
+            }
+
+            if (string.IsNullOrEmpty(newPass) || newPass.Length < 8 || newPass.Length > 20)
+            {
+                ViewBag.Error = "Mật khẩu mới phải từ 8 đến 20 ký tự!";
+                return View();
+            }
+
+            user.Matkhau = MeikoShop.Controllers.UserController.sha512(newPass);
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            // Cập nhật lại session
+            Session["use"] = user;
+
+            ViewBag.Success = "Đổi mật khẩu thành công!";
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

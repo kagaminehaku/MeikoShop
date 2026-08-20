@@ -26,7 +26,7 @@ namespace MeikoShop.Controllers
                 Session["userReg"] = nguoidung;
 
                 // Mã hoá mật khẩu và set quyền mặc định (Mass Assignment Fix & Password Hashing Fix)
-                nguoidung.Matkhau = md5(nguoidung.Matkhau);
+                nguoidung.Matkhau = sha512(nguoidung.Matkhau);
                 nguoidung.IDQuyen = 2; // Giả sử 2 là user thường
 
                 // Thêm người dùng  mới
@@ -66,7 +66,7 @@ namespace MeikoShop.Controllers
         {
             string userMail = userlog["userMail"].ToString();
             string password = userlog["password"].ToString();
-            string hashed_password = md5(password);
+            string hashed_password = sha512(password);
             var islogin = db.Nguoidungs.SingleOrDefault(x => x.Email.Equals(userMail) && x.Matkhau.Equals(hashed_password));
 
             if (islogin != null)
@@ -156,17 +156,13 @@ namespace MeikoShop.Controllers
             ViewBag.IDQuyen = new SelectList(db.PhanQuyens, "IDQuyen", "TenQuyen", nguoidung.IDQuyen);
             return View(nguoidung);
         }
-        public static byte[] encryptData(string data)
+        public static string sha512(string data)
         {
-            System.Security.Cryptography.MD5CryptoServiceProvider md5Hasher = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] hashedBytes;
-            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            hashedBytes = md5Hasher.ComputeHash(encoder.GetBytes(data));
-            return hashedBytes;
-        }
-        public static string md5(string data)
-        {
-            return BitConverter.ToString(encryptData(data)).Replace("-", "").ToLower();
+            using (System.Security.Cryptography.SHA512 shaM = System.Security.Cryptography.SHA512.Create())
+            {
+                byte[] hash = shaM.ComputeHash(System.Text.Encoding.UTF8.GetBytes(data));
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
         }
     }
 }
