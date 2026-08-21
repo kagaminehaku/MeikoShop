@@ -1,4 +1,4 @@
-﻿@model MeikoShop.Models.Nguoidung
+@model MeikoShop.Models.Nguoidung
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <script src="~/Content/ckfinder/ckfinder.js"></script>
 <script src="~/Scripts/jquery-3.4.1.slim.js"></script>
@@ -47,10 +47,28 @@
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Matkhau, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Matkhau, "Mật khẩu", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.Matkhau, new { htmlAttributes = new { @class = "form-control" } })
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Matkhau, new { htmlAttributes = new { @class = "form-control", @type = "password", id = "Matkhau" } })
+                                <button class="btn btn-outline-secondary peek-password-btn" type="button" data-target="Matkhau">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
                             @Html.ValidationMessageFor(model => model.Matkhau, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="XacNhanMatKhau">Xác nhận mật khẩu</label>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <input type="password" id="XacNhanMatKhau" name="XacNhanMatKhau" class="form-control" required />
+                                <button class="btn btn-outline-secondary peek-password-btn" type="button" data-target="XacNhanMatKhau">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                            <span id="passwordError" class="text-danger" style="display:none;">Mật khẩu xác nhận không khớp!</span>
                         </div>
                     </div>
 
@@ -78,9 +96,59 @@
                 $("#Anhdaidien").val(fileUrl);
             };
             ckfiner.popup();
-        })
-    });
+        });
 
+        function checkPasswordMatch() {
+            var matkhau = $("#Matkhau").val();
+            var xacNhan = $("#XacNhanMatKhau").val();
+            if (xacNhan.length > 0 && matkhau !== xacNhan) {
+                $("#passwordError").show();
+            } else {
+                $("#passwordError").hide();
+            }
+        }
+
+        $("#Matkhau, #XacNhanMatKhau").on("input", checkPasswordMatch);
+
+        $("form").submit(function(e) {
+            var matkhau = $("#Matkhau").val();
+            var xacNhan = $("#XacNhanMatKhau").val();
+            if (matkhau !== xacNhan) {
+                $("#passwordError").show();
+                e.preventDefault();
+            }
+        });
+        var peekBtns = document.querySelectorAll(".peek-password-btn");
+        peekBtns.forEach(function(btn) {
+            var targetId = btn.getAttribute("data-target");
+            var input = document.getElementById(targetId);
+            var icon = btn.querySelector("i");
+            
+            function showPassword(e) {
+                if (e.type !== "mouseleave" || input.type === "text") {
+                    e.preventDefault();
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                }
+            }
+            
+            function hidePassword(e) {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+
+            // Mouse events
+            btn.addEventListener("mousedown", showPassword);
+            btn.addEventListener("mouseup", hidePassword);
+            btn.addEventListener("mouseleave", hidePassword);
+            
+            // Touch events for mobile
+            btn.addEventListener("touchstart", showPassword);
+            btn.addEventListener("touchend", hidePassword);
+        });
+    });
 
     var ckeditor;
     function createEditor(languageCode, id) {

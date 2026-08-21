@@ -1,4 +1,4 @@
-﻿@model MeikoShop.Models.Nguoidung
+@model MeikoShop.Models.Nguoidung
 
 @{
     ViewBag.Title = "Đăng ký";
@@ -6,9 +6,17 @@
     var useReg = Session["useReg"] as MeikoShop.Models.Nguoidung;
 }
 
+<style>
+    .no-hover-card:hover {
+        transform: none !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+    }
+</style>
+
 <div class="row justify-content-center align-items-center min-vh-100 py-5" style="margin-top: -40px;">
     <div class="col-md-8 col-lg-6">
-        <div class="glass-card p-5">
+        <div class="glass-card no-hover-card p-5">
             <div class="text-center mb-4">
                 <i class="fa-solid fa-user-plus fa-3x text-gradient mb-3"></i>
                 <h2 class="fw-bold text-white">Tạo tài khoản mới</h2>
@@ -60,11 +68,27 @@
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger small mt-1 d-block" })
                     </div>
 
-                    <div class="form-floating mb-4">
-                        @Html.EditorFor(model => model.Matkhau, new { htmlAttributes = new { type = "Password", @class = "form-control bg-transparent text-white border-secondary", @placeholder = "Mật khẩu" } })
-                        @Html.LabelFor(model => model.Matkhau, "Mật khẩu", new { @class = "text-muted" })
-                        @Html.ValidationMessageFor(model => model.Matkhau, "", new { @class = "text-danger small mt-1 d-block" })
+                    <div class="input-group mb-4">
+                        <div class="form-floating flex-grow-1">
+                            @Html.EditorFor(model => model.Matkhau, new { htmlAttributes = new { type = "password", id = "Matkhau", @class = "form-control bg-transparent text-white border-secondary", @placeholder = "Mật khẩu" } })
+                            @Html.LabelFor(model => model.Matkhau, "Mật khẩu", new { @class = "text-muted" })
+                        </div>
+                        <button class="btn btn-outline-secondary border-secondary text-white px-3 peek-password-btn" type="button" data-target="Matkhau">
+                            <i class="fa fa-eye"></i>
+                        </button>
                     </div>
+                    @Html.ValidationMessageFor(model => model.Matkhau, "", new { @class = "text-danger small mt-1 mb-3 d-block" })
+
+                    <div class="input-group mb-4">
+                        <div class="form-floating flex-grow-1">
+                            <input type="password" id="XacNhanMatKhau" name="XacNhanMatKhau" class="form-control bg-transparent text-white border-secondary" placeholder="Xác nhận mật khẩu" required />
+                            <label for="XacNhanMatKhau" class="text-muted">Xác nhận mật khẩu</label>
+                        </div>
+                        <button class="btn btn-outline-secondary border-secondary text-white px-3 peek-password-btn" type="button" data-target="XacNhanMatKhau">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                    <span id="passwordError" class="text-danger small mt-1 mb-3 d-none">Mật khẩu xác nhận không khớp!</span>
 
                     <div class="form-floating mb-4">
                         @Html.EditorFor(model => model.Diachi, new { htmlAttributes = new { @class = "form-control bg-transparent text-white border-secondary", @placeholder = "Địa chỉ nhận hàng" } })
@@ -83,3 +107,69 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.querySelector("form");
+        var matkhau = document.getElementById("Matkhau");
+        var xacNhan = document.getElementById("XacNhanMatKhau");
+        var errorSpan = document.getElementById("passwordError");
+
+        function checkPasswordMatch() {
+            if (matkhau && xacNhan && errorSpan) {
+                if (xacNhan.value.length > 0 && matkhau.value !== xacNhan.value) {
+                    errorSpan.classList.remove("d-none");
+                    errorSpan.classList.add("d-block");
+                } else {
+                    errorSpan.classList.remove("d-block");
+                    errorSpan.classList.add("d-none");
+                }
+            }
+        }
+
+        if (matkhau && xacNhan) {
+            matkhau.addEventListener("input", checkPasswordMatch);
+            xacNhan.addEventListener("input", checkPasswordMatch);
+        }
+
+        if (form) {
+            form.addEventListener("submit", function (e) {
+                if (matkhau && xacNhan && matkhau.value !== xacNhan.value) {
+                    errorSpan.classList.remove("d-none");
+                    errorSpan.classList.add("d-block");
+                    e.preventDefault();
+                }
+            });
+        }
+        var peekBtns = document.querySelectorAll(".peek-password-btn");
+        peekBtns.forEach(function(btn) {
+            var targetId = btn.getAttribute("data-target");
+            var input = document.getElementById(targetId);
+            var icon = btn.querySelector("i");
+            
+            function showPassword(e) {
+                if (e.type !== "mouseleave" || input.type === "text") {
+                    e.preventDefault();
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                }
+            }
+            
+            function hidePassword(e) {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+
+            // Mouse events
+            btn.addEventListener("mousedown", showPassword);
+            btn.addEventListener("mouseup", hidePassword);
+            btn.addEventListener("mouseleave", hidePassword);
+            
+            // Touch events for mobile
+            btn.addEventListener("touchstart", showPassword);
+            btn.addEventListener("touchend", hidePassword);
+        });
+    });
+</script>
