@@ -60,10 +60,18 @@ namespace MeikoShop.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Masp,Tensp,Giatien,Soluong,Mota,Thesim,Bonhotrong,Sanphammoi,Ram,Anhbia,Mahang,Machatlieu")] Sanpham sanpham)
+        public ActionResult Create([Bind(Include = "Masp,Tensp,Giatien,Soluong,Mota,Thesim,Bonhotrong,Sanphammoi,Ram,Anhbia,Mahang,Machatlieu")] Sanpham sanpham, HttpPostedFileBase ImageUpload)
         {
             if (ModelState.IsValid)
             {
+                if (ImageUpload != null && ImageUpload.ContentLength > 0)
+                {
+                    string fileName = System.IO.Path.GetFileName(ImageUpload.FileName);
+                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/files/"), fileName);
+                    ImageUpload.SaveAs(path);
+                    sanpham.Anhbia = "/Images/files/" + fileName;
+                }
+
                 db.Sanphams.Add(sanpham);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -90,7 +98,7 @@ namespace MeikoShop.Areas.Admin.Controllers
 
         // POST: Admin/Home/Edit/5
         [HttpPost]
-        public ActionResult Edit(Sanpham sanpham)
+        public ActionResult Edit(Sanpham sanpham, HttpPostedFileBase ImageUpload)
         {
             try
             {
@@ -100,9 +108,17 @@ namespace MeikoShop.Areas.Admin.Controllers
                 oldItem.Giatien = sanpham.Giatien;
                 oldItem.Soluong = sanpham.Soluong;
                 oldItem.Mota = sanpham.Mota;
-                oldItem.Anhbia = sanpham.Anhbia;
                 oldItem.Mahang = sanpham.Mahang;
                 oldItem.Machatlieu = sanpham.Machatlieu;
+                
+                if (ImageUpload != null && ImageUpload.ContentLength > 0)
+                {
+                    string fileName = System.IO.Path.GetFileName(ImageUpload.FileName);
+                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/files/"), fileName);
+                    ImageUpload.SaveAs(path);
+                    oldItem.Anhbia = "/Images/files/" + fileName;
+                }
+
                 // lưu lại
                 db.SaveChanges();
                 // xong chuyển qua index

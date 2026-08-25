@@ -1,13 +1,12 @@
-﻿@model MeikoShop.Models.Sanpham
+@model MeikoShop.Models.Sanpham
 <script src="~/Content/ckeditor/ckeditor.js"></script>
-<script src="~/Content/ckfinder/ckfinder.js"></script>
 <script src="~/Scripts/jquery-3.4.1.slim.js"></script>
 @{ ViewBag.Title = "Edit";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml"; }
 
 <h2>Chỉnh sửa sản phẩm</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
 @Html.AntiForgeryToken()
 
@@ -62,8 +61,9 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Anhbia, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Anhbia, new { htmlAttributes = new { @class = "form-control" } })
-            <button id="chonDuongDanAnh" type="button" class="btn btn-info"><i class="fas fa-image font-size-20"></i>Upload file</button>
+            <input type="file" name="ImageUpload" id="ImageUpload" accept="image/*" class="form-control" onchange="previewImage(event)" />
+            <img id="imagePreview" src="@Model.Anhbia" alt="Image Preview" style="@(string.IsNullOrEmpty(Model.Anhbia) ? "display:none;" : "") max-width: 200px; margin-top: 10px; border-radius: 8px;" />
+            @Html.HiddenFor(model => model.Anhbia)
             @Html.ValidationMessageFor(model => model.Anhbia, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -92,18 +92,19 @@
 
 
 <script language="javascrip" type="text/javascript">
-    $(function () {
-        $("#chonDuongDanAnh").click(function () {
-            var ckfiner = new CKFinder();
-            ckfiner.selectActionFunction = function (fileUrl) {
-                $("#Anhbia").val(fileUrl);
-            };
-            ckfiner.popup();
-        })
-    });
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
     var ckeditor;
     function createEditor(languageCode, id) {
         var editor = CKEDITOR.replace(id, { language: languageCode });
     }
-    $(function () { createEditor('vi', 'Mo') });
+    $(function () { createEditor('vi', 'Mota') });
 </script>

@@ -138,7 +138,7 @@ namespace MeikoShop.Controllers
         // POST: Admin/Nguoidungs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaNguoiDung,Hoten,Email,Dienthoai,Matkhau,Anhdaidien,Diachi")] Nguoidung nguoidung)
+        public ActionResult Edit([Bind(Include = "MaNguoiDung,Hoten,Email,Dienthoai,Matkhau,Anhdaidien,Diachi")] Nguoidung nguoidung, HttpPostedFileBase ImageUpload)
         {
             if (ModelState.IsValid)
             {
@@ -146,6 +146,15 @@ namespace MeikoShop.Controllers
                 if (existingUser != null) {
                     nguoidung.IDQuyen = existingUser.IDQuyen; // Prevent IDQuyen modification
                 }
+                
+                if (ImageUpload != null && ImageUpload.ContentLength > 0)
+                {
+                    string fileName = System.IO.Path.GetFileName(ImageUpload.FileName);
+                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/files/"), fileName);
+                    ImageUpload.SaveAs(path);
+                    nguoidung.Anhdaidien = "/Images/files/" + fileName;
+                }
+
                 db.Entry(nguoidung).State = EntityState.Modified;
                 db.SaveChanges();
                 //@ViewBag.show = "Chỉnh sửa hồ sơ thành công";
